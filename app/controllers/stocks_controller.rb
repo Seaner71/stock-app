@@ -1,6 +1,7 @@
 class StocksController < ApplicationController
   before_action :set_stock, only: [:show, :edit, :update, :destroy]
-
+  before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!
   # GET /stocks
   # GET /stocks.json
   def index
@@ -10,6 +11,7 @@ class StocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
+    # @stock = StockQuote::Stock.quote(params[:id])
   end
 
   # GET /stocks/new
@@ -25,7 +27,7 @@ class StocksController < ApplicationController
   # POST /stocks.json
   def create
     @stock = Stock.new(stock_params)
-
+    @stock.user_id = current_user.id
     respond_to do |format|
       if @stock.save
         format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
@@ -70,5 +72,9 @@ class StocksController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_params
       params.require(:stock).permit(:ticker, :user_id)
+    end
+    def correct_user
+      @ticker = current_user.stocks.find_by(id: params[:id])
+      redirect_to stocks_path, notice: "Not authorized to edit this stock" if @ticker.nil?
     end
 end

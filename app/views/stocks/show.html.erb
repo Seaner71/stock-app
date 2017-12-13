@@ -1,13 +1,45 @@
+<% @stock_quote = StockQuote::Stock.quote(@stock.ticker) %>
+  <% @stock.ticker %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><h3><strong><%= @stock_quote.name %> | <%= @stock_quote.symbol %></strong></h3>
+    </div>
+    <div class="panel-body">
+    <div class="col-md-4">
+        <% if @stock_quote.c.to_f >= 0 %>
+          <h1 class='green'><%= @stock_quote.l %></h1> <br>
+          <strong>Days Change: </strong><em class='green'><%= @stock_quote.c %> </em><br>
+        <% else %>
+          <h1 class='red'><%= @stock_quote.l %></h1> <br>
+          <strong>Days Change: </strong> <em class='red'><%= @stock_quote.c %> </em> <br>
+        <% end %>
 
-<p>
-  <strong>Ticker:</strong>
-  <%= @stock.ticker %>
-</p>
+        <strong>Current Company Worth: </strong><%= @stock_quote.mc %> <br>
+        <strong>52 Week High: </strong><%= @stock_quote.hi52 %> <br>
+        <strong>52 Week Low:</strong><%= @stock_quote.lo52 %> <br>
+      </div>
+      <div class="col-md-8">
+        <%= @stock_quote.summary[0]['overview'] %>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer">
+      <%= link_to 'Edit', edit_stock_path(@stock), class: 'btn btn-default'  %>
+      <%= link_to 'Back', stocks_path, class: 'btn btn-default' %>
+      <%= link_to 'Remove Stock', stock_path(@stock), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+  </div>
 
-<p>
-  <strong>User:</strong>
-  <%= @stock.user_id %>
-</p>
 
-<%= link_to 'Edit', edit_stock_path(@stock) %> |
-<%= link_to 'Back', stocks_path %>
+
+<br>
+
+<% @stock_history = StockQuote::Stock.history(@stock.ticker, "12/01/2016", Time.now.strftime("%d/%m/%Y")) %>
+
+<% @stock_history[:history].each do |day| %>
+   <%= day[:date] %>
+    <%= day[:close] %>
+  <% end %>
+
+
+
+  
