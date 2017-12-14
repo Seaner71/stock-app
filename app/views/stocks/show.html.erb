@@ -34,12 +34,13 @@
 <br>
 
 <% @stock_history = StockQuote::Stock.history(@stock.ticker, "12/01/2016", Time.now.strftime("%d/%m/%Y")) %>
-
+  <% @stock_price_hash = {} %>
 <% @stock_history[:history].each do |day| %>
-   <%= day[:date] %>
-    <%= day[:close] %>
+   <% @stock_price_hash[day[:date]] = day[:close] %>
+
   <% end %>
 
-
-
-  
+  <%= pie_chart Stock.group(:ticker).count %>
+  <%=  %>
+  <%# line_chart(@stock_history[:history]) %>
+  <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price"  %>

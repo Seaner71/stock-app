@@ -10,6 +10,7 @@
     <tr>
       <th>Company Name</th>
       <th>Ticker</th>
+      <th>Sector</th>
       <th>Current Price</th>
       <th>Market Value</th>
 
@@ -24,8 +25,9 @@
         <tr>
           <td><%= link_to @stock_quote.name, stock %></td>
           <td><%= stock.ticker.upcase %></td>
-          <td><%= @stock_quote.l.to_f %></td>
-          <td><%= @shares * @stock_quote.l.to_f %></td>
+          <td><%= @stock_quote.sname %></td>
+          <td><%= @stock_quote.l %></td>
+          <td><%= @shares * @stock_quote.l.to_i %></td>
         </tr>
       <% end %>
     <% end %>
@@ -35,3 +37,10 @@
 <br>
 
 <%= link_to 'New Stock', new_stock_path, class: 'btn btn-default' %>
+<% color = [] %>
+
+<% 6.times do %>
+  <% color.push('#' + "%06x" % (rand * 0xffffff)) %>
+<% end %>
+<%= color %>
+<%= pie_chart @stocks.group(:ticker).sum(@shares * @stock_quote.l.to_f), colors: color %>
