@@ -12,6 +12,7 @@ class StocksController < ApplicationController
   # GET /stocks/1.json
   def show
     # @stock = StockQuote::Stock.quote(params[:id])
+    get_stock_history
   end
 
   # GET /stocks/new
@@ -28,6 +29,7 @@ class StocksController < ApplicationController
   def create
     @stock = Stock.new(stock_params)
     @stock.user_id = current_user.id
+    @stock.sname = StockQuote::Stock.quote(params['stock'][:ticker]).sname
     respond_to do |format|
       if @stock.save
         format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
@@ -71,10 +73,17 @@ class StocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_params
-      params.require(:stock).permit(:ticker, :user_id)
+      params.require(:stock).permit(:ticker, :user_id, :shares, :sname)
     end
     def correct_user
       @ticker = current_user.stocks.find_by(id: params[:id])
       redirect_to stocks_path, notice: "Not authorized to edit this stock" if @ticker.nil?
+    end
+    def get_stock_history
+     @stock_history = StockQuote::Stock.history(@stock.ticker, "07/15/2016", Time.now.strftime("%d/%m/%Y"))
+        @stock_price_hash = {}
+        @stock_history[:history].each do |day|
+          @stock_price_hash[day[:date]] = day[:close]
+        end
     end
 end

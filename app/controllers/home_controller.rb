@@ -7,8 +7,14 @@ class HomeController < ApplicationController
         @stock = StockQuote::Stock.quote(params[:id])
       end
     end
+    verify_stock
   end
 
   def about
+  end
+  def verify_stock
+    if @stock == nil
+      @error = 'That is not a valid stock symbol'
+    end
   end
 end

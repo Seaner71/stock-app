@@ -21,13 +21,12 @@
     <% @stocks.each do |stock| %>
       <% if stock.user_id == current_user.id %>
         <% @stock_quote = StockQuote::Stock.quote(stock.ticker) %>
-        <% @shares = 1000 %>
         <tr>
           <td><%= link_to @stock_quote.name, stock %></td>
           <td><%= stock.ticker.upcase %></td>
           <td><%= @stock_quote.sname %></td>
           <td><%= @stock_quote.l %></td>
-          <td><%= @shares * @stock_quote.l.to_i %></td>
+          <td><%= stock.shares * @stock_quote.l.to_i %></td>
         </tr>
       <% end %>
     <% end %>
@@ -43,4 +42,6 @@
   <% color.push('#' + "%06x" % (rand * 0xffffff)) %>
 <% end %>
 <%= color %>
-<%= pie_chart @stocks.group(:ticker).sum(@shares * @stock_quote.l.to_f), colors: color %>
+>
+<%= pie_chart current_user.stocks.group(:ticker).sum(:shares), colors: color %>
+<%= pie_chart current_user.stocks.group(:sname).sum(:shares), colors: color %>
