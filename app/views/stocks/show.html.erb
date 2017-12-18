@@ -31,7 +31,8 @@
 
 
 <br>
-
+<%= select_date Date.today << 1, prefix: :start_date%>
+<%= select_date Date.today, prefix: :end_date %>
 
 <% @stock_history = StockQuote::Stock.history(@stock.ticker, "07/15/2016", Time.now.strftime("%d/%m/%Y")) %>
   <% @stock_price_hash = {} %>

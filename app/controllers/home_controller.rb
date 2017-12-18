@@ -5,16 +5,14 @@ class HomeController < ApplicationController
     elsif
       if params[:id]
         @stock = StockQuote::Stock.quote(params[:id])
+          if @stock == nil
+            @error = 'That is not a valid stock symbol'
+          end
       end
     end
-    verify_stock
-  end
+end
 
   def about
   end
-  def verify_stock
-    if @stock == nil
-      @error = 'That is not a valid stock symbol'
-    end
-  end
+
 end

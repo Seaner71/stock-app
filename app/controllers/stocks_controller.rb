@@ -5,7 +5,7 @@ class StocksController < ApplicationController
   # GET /stocks
   # GET /stocks.json
   def index
-    @stocks = Stock.all
+    @stocks = current_user.stocks
   end
 
   # GET /stocks/1
