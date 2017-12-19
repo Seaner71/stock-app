@@ -61,7 +61,7 @@
       <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
   </div>
   <div class="tab-pane" id="ytd" role="tabpanel" aria-labelledby="ytd-tab">
-    <% @stock_history = StockQuote::Stock.history(@stock.ticker, Date.today.beginning_of_year, Time.now.strftime("%m/%d/%Y")) %>
+    <% @stock_history = StockQuote::Stock.history(@stock.ticker, Date.today.beginning_of_year, Date.today) %>
       <% @stock_price_hash = {} %>
       <% @stock_history[:history].each do |day| %>
         <% @stock_price_hash[day[:date]] = day[:close] %>
@@ -90,6 +90,7 @@
 <input id="start_date" type="date", name="start">
 <input class='submit' type="submit">
 <input id="end_date" type="date", name="end">
+<input class='submit' type="submit">
 </form>
 <script type="text/javascript">
   const form = document.forms[0];
