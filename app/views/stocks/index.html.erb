@@ -42,7 +42,8 @@
 <% 6.times do %>
   <% color.push('#' + "%06x" % (rand * 0xffffff)) %>
 <% end %>
+
 <% color %>
 
-<%= pie_chart current_user.stocks.group(:ticker).sum(@market_value), colors: color %>
-<%= pie_chart current_user.stocks.group(:sname).sum(:shares), colors: color %>
+<%= pie_chart @stocks.group(:ticker).sum(:shares), colors: color %>
+<%= pie_chart @stocks.group(:sname).sum(:shares), colors: color %>
