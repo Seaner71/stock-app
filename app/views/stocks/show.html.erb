@@ -31,20 +31,39 @@
 
 
 <br>
-<%= select_date Date.today << 1, prefix: :start_date%>
-<%= select_date Date.today, prefix: :end_date %>
 
-<% @stock_history = StockQuote::Stock.history(@stock.ticker, "07/15/2016", Time.now.strftime("%d/%m/%Y")) %>
+<ul class="nav nav-tabs" id="tabSort" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="mtdTab" data-toggle="tab" href="#mtd" role="tab" aria-controls="mtd" aria-selected="true">MTD</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="ytdTab" data-toggle="tab" href="#ytd" role="tab" aria-controls="ytd" aria-selected="false">YTD</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="1yTab" data-toggle="tab" href="#1y" role="tab" aria-controls="1y" aria-selected="false">1Y</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="5yTab" data-toggle="tab" href="#5y" role="tab" aria-controls="5y" aria-selected="false">5Y</a>
+        </li>
+</ul>
+<form>
+<input id="start_date" type="date", name="start">
+<input class='submit' type="submit">
+<input id="end_date" type="date", name="end">
+</form>
+<script type="text/javascript">
+  const form = document.forms[0];
+  form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    var startDate = form.start.value
+    var endDate = form.end.value
+});
+</script>
+
+<% @stock_history = StockQuote::Stock.history(@stock.ticker, '12/01/17', '12/20/2017') %>
   <% @stock_price_hash = {} %>
 <% @stock_history[:history].each do |day| %>
    <% @stock_price_hash[day[:date]] = day[:close] %>
-
   <% end %>
-
-  <% @stock_history_comp = StockQuote::Stock.history('mrk', "07/15/2016", Time.now.strftime("%d/%m/%Y")) %>
-    <% @stock_price_hash_comp = {} %>
-  <% @stock_history_comp[:history].each do |day| %>
-     <% @stock_price_hash_comp[day[:date]] = day[:close] %>
-    <% end %>
 
   <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
