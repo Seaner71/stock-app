@@ -1,39 +1,40 @@
 
-<h1> My Stocks</h1>
-<% if @stocks.empty? %>
-  <h2> <%= "Buy some stocks!!" %> </h2>
+<h3> My Portfolio</h3>
+  <% if @stocks.empty? %>
+    <h2> <%= "Buy some stocks!!" %> </h2>
   <% end %>
-<table class="table table-striped table-bordered table-hover">
-  <thead>
-    <tr>
-      <th>Company Name</th>
-      <th>Ticker</th>
-      <th>Shares</th>
-      <th>Sector</th>
-      <th>Current Price</th>
-      <th>Market Value</th>
 
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @stocks.each do |stock| %>
-
-        <% @stock_quote = StockQuote::Stock.quote(stock.ticker) %>
+    <table class="table table-striped table-bordered table-hover">
+      <thead>
         <tr>
-          <td><%= link_to @stock_quote.name, stock %></td>
-          <td><%= stock.ticker.upcase %></td>
-          <td><%= stock.shares %></td>
-          <td><%= stock.sname %></td>
-          <td><%= @stock_quote.l %></td>
-              <% @market_value = (stock.shares * @stock_quote.l.to_f)%>
-          <td> <%= number_to_currency(@market_value) %></td>
+          <th>Company Name</th>
+          <th>Ticker</th>
+          <th>Shares</th>
+          <th>Sector</th>
+          <th>Current Price</th>
+          <th>Market Value</th>
         </tr>
+      </thead>
 
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @total_mv = 0 %>
+        <% @stocks.each do |stock| %>
+            <% @stock_quote = StockQuote::Stock.quote(stock.ticker) %>
+            <tr>
+              <td><%= link_to @stock_quote.name, stock %></td>
+              <td><%= stock.ticker.upcase %></td>
+              <td><%= stock.shares %></td>
+              <td><%= stock.sname %></td>
+              <td><%= @stock_quote.l %></td>
+                  <% @market_value = (stock.shares * @stock_quote.l.to_f)%>
+              <td> <%= number_to_currency(@market_value) %></td>
+                  <% @total_mv += @market_value %>
+            </tr>
+        <% end %>
 
+      </tbody>
+    </table>
+        <%= number_to_currency(@total_mv) %>
 <br>
 
 <%= link_to 'Add a Stock', new_stock_path, class: 'btn btn-default' %>
@@ -44,6 +45,13 @@
 <% end %>
 
 <% color %>
+<div class="row">
+    <div class="col-md-6">
+      <%= pie_chart @stocks.group(:ticker).sum(:shares), colors: color %>
+    </div>
 
-<%= pie_chart @stocks.group(:ticker).sum(:shares), colors: color %>
-<%= pie_chart @stocks.group(:sname).sum(:shares), colors: color %>
+    <div class="col-md-6">
+      <%= pie_chart @stocks.group(:sname).sum(:shares), colors: color %>
+    </div>
+
+  </div>

@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     elsif
       if params[:id]
         @stock = StockQuote::Stock.quote(params[:id])
-          if @stock == nil
+          if @stock == nil || @stock.name == nil
             @error = 'That is not a valid stock symbol'
           end
       end

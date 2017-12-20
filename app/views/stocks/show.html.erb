@@ -48,12 +48,15 @@
   <li class="nav-item">
     <a class="nav-link" id="5y-tab" data-toggle="tab" href="#5y" role="tab" aria-controls="5Y" aria-selected="false">5Y</a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link" id="custom-tab" data-toggle="tab" href="#custom" role="tab" aria-controls="custom" aria-selected="false">Custom</a>
+  </li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content">
   <div class="tab-pane active" id="mtd" role="tabpanel" aria-labelledby="mtd-tab">
-    <% @stock_history = StockQuote::Stock.history(@stock.ticker, Date.today.beginning_of_month, Time.now.strftime("%m/%d/%Y")) %>
+    <% @stock_history = StockQuote::Stock.history(@stock.ticker, Date.today.beginning_of_month, Date.today) %>
       <% @stock_price_hash = {} %>
         <% @stock_history[:history].each do |day| %>
         <% @stock_price_hash[day[:date]] = day[:close] %>
@@ -69,7 +72,7 @@
       <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
   </div>
   <div class="tab-pane" id="3y" role="tabpanel" aria-labelledby="3y-tab">
-    <% @stock_history = StockQuote::Stock.history(@stock.ticker,  Date.today.years_ago(3),  Time.now.strftime("%m/%d/%Y")) %>
+    <% @stock_history = StockQuote::Stock.history(@stock.ticker,  Date.today.years_ago(3),  Date.today) %>
       <% @stock_price_hash = {} %>
       <% @stock_history[:history].each do |day| %>
         <% @stock_price_hash[day[:date]] = day[:close] %>
@@ -77,26 +80,20 @@
       <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
   </div>
   <div class="tab-pane" id="5y" role="tabpanel" aria-labelledby="5y-tab">
-    <% @stock_history = StockQuote::Stock.history(@stock.ticker,   Date.today.years_ago(5),  Time.now.strftime("%m/%d/%Y")) %>
+    <% @stock_history = StockQuote::Stock.history(@stock.ticker,   Date.today.years_ago(5),  Date.today) %>
       <% @stock_price_hash = {} %>
       <% @stock_history[:history].each do |day| %>
         <% @stock_price_hash[day[:date]] = day[:close] %>
       <% end %>
       <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
   </div>
+  <div class="tab-pane" id="custom" role="tabpanel" aria-labelledby="custom-tab">
+    <form action="/createDate"  method="get">
+      <input id='id', type="hidden" name="id" value="<%=@stock.id%>">
+      <input id="start_date" type="date", name="start", max='<%=Date.today-1%>'>
+      <input id="end_date" type="date", name="end", max='<%=Date.today%>'>
+      <input class='submit' type="submit">
+    </form>
+    <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
+  </div>
 </div>
-
-<form>
-<input id="start_date" type="date", name="start">
-<input class='submit' type="submit">
-<input id="end_date" type="date", name="end">
-<input class='submit' type="submit">
-</form>
-<script type="text/javascript">
-  const form = document.forms[0];
-  form.addEventListener('submit', function(event) {
-    event.preventDefault();
-    var startDate = form.start.value
-    var endDate = form.end.value
-});
-</script>

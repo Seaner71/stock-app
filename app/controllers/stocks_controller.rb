@@ -11,7 +11,7 @@ class StocksController < ApplicationController
   # GET /stocks/1
   # GET /stocks/1.json
   def show
-    # @stock = StockQuote::Stock.quote(params[:id])
+    @stock = Stock.find_by_id(params[:id])
     # get_stock_history
   end
 
@@ -63,6 +63,21 @@ class StocksController < ApplicationController
       format.html { redirect_to stocks_url, notice: 'Stock was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def createDate
+    @stock = Stock.find_by_id(params[:id])
+    @start_date = params['start']
+    @end_date = params['end']
+
+    @stock_history = StockQuote::Stock.history(@stock.ticker,   @start_date,  @end_date)
+    @stock_price_hash = {}
+    @stock_history[:history].each do |day|
+    @stock_price_hash[day[:date]] = day[:close]
+    end
+    # binding.pry
+    render 'show'
+    # redirect_back(fallback_location: stock_path(@stock))
   end
 
   private
