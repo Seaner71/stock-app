@@ -1,0 +1,9 @@
+<form action="<%=params[:id]%>/createDate"  method="get">
+  <input type="hidden" name="id" value="<%=@stock.id%>">
+  <input id="start_date" type="date", name="start", max='<%=Date.today-1%>'>
+  <input id="end_date" type="date", name="end", max='<%=Date.today%>'>
+  <input class='submit' type="submit">
+</form>
+<%# line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
+<%= @start_date %>
+<%= @end_date %>

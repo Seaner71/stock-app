@@ -19,6 +19,7 @@
   <% @stock.management.each do |m| %>
       <%= m['name'] %> | <%= m['title'] %>
       <br>
+      <%= @stock.financials[0]['f_figures'].map {|x| x['recent_quarter'] }.map.with_index {|y,i| y if i == 2 || i == 3 || i ==4 }.compact %>
     <% end %>
 
 <% elsif @nothing %>

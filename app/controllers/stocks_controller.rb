@@ -13,6 +13,7 @@ class StocksController < ApplicationController
   def show
     @stock = Stock.find_by_id(params[:id])
     # get_stock_history
+
   end
 
   # GET /stocks/new
@@ -30,6 +31,7 @@ class StocksController < ApplicationController
     @stock = Stock.new(stock_params)
     @stock.user_id = current_user.id
     @stock.sname = StockQuote::Stock.quote(params['stock'][:ticker]).sname
+    @stock.name = StockQuote::Stock.quote(params['stock'][:ticker]).name
     respond_to do |format|
       if @stock.save
         format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
@@ -66,18 +68,15 @@ class StocksController < ApplicationController
   end
 
   def createDate
-    @stock = Stock.find_by_id(params[:id])
+    set_stock
     @start_date = params['start']
     @end_date = params['end']
-
     @stock_history = StockQuote::Stock.history(@stock.ticker,   @start_date,  @end_date)
     @stock_price_hash = {}
     @stock_history[:history].each do |day|
     @stock_price_hash[day[:date]] = day[:close]
     end
-    # binding.pry
     render 'show'
-    # redirect_back(fallback_location: stock_path(@stock))
   end
 
   private
@@ -88,7 +87,7 @@ class StocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_params
-      params.require(:stock).permit(:ticker, :user_id, :shares, :sname)
+      params.require(:stock).permit(:ticker, :user_id, :shares, :sname, :name)
     end
     def correct_user
       @ticker = current_user.stocks.find_by(id: params[:id])

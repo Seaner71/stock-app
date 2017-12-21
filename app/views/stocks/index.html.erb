@@ -47,7 +47,7 @@
 <% color %>
 <div class="row">
     <div class="col-md-6">
-      <%= pie_chart @stocks.group(:ticker).sum(:shares), colors: color %>
+      <%= pie_chart @stocks.group(:name).sum(:shares), colors: color %>
     </div>
 
     <div class="col-md-6">
@@ -55,3 +55,5 @@
     </div>
 
   </div>
+
+    
