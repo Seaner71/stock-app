@@ -7,3 +7,14 @@
 <%# line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
 <%= @start_date %>
 <%= @end_date %>
+<%= @stock.ticker %>
+
+<%= form_for @stock, method: :createDate, :remote => true do |f| %>
+  <div class="field">
+    <%= f.hidden_field :stock_id, :value => @stock.id %>
+    <%= f.text_field :stock_id, :value => @stock.id %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Submit" %>
+  </div>
+<% end %>
