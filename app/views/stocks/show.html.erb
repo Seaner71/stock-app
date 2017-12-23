@@ -88,8 +88,6 @@
       <%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
   </div>
   <div class="tab-pane" id="custom" role="tabpanel" aria-labelledby="custom-tab">
-
+      <%= render 'date' %>
   </div>
 </div>
-
-<%= render 'date' %>

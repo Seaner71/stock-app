@@ -1,20 +1,17 @@
-<form action="<%=params[:id]%>/createDate"  method="get">
-  <input type="hidden" name="id" value="<%=@stock.id%>">
-  <input id="start_date" type="date", name="start", max='<%=Date.today-1%>'>
-  <input id="end_date" type="date", name="end", max='<%=Date.today%>'>
-  <input class='submit' type="submit">
-</form>
-<%# line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>
-<%= @start_date %>
-<%= @end_date %>
-<%= @stock.ticker %>
-
-<%= form_for @stock, method: :createDate, :remote => true do |f| %>
+<%= form_for @stock, :remote => true do |f| %>
   <div class="field">
     <%= f.hidden_field :stock_id, :value => @stock.id %>
-    <%= f.text_field :stock_id, :value => @stock.id %>
+    <%= f.date_field :start_date, :value => @stock.start_date %>
+    <%= f.date_field :end_date, :value => @stock.end_date %>
   </div>
   <div class="actions">
     <%= f.submit "Submit" %>
   </div>
 <% end %>
+
+<% @stock_history = StockQuote::Stock.history(@stock.ticker,   @stock.start_date ||= "10/22/2017",  @stock.end_date ||="12/20/2107") %>
+  <% @stock_price_hash = {} %>
+  <% @stock_history[:history].each do |day| %>
+    <% @stock_price_hash[day[:date]] = day[:close] %>
+  <% end %>
+<%= line_chart (@stock_price_hash), xtitle: "Date", ytitle: "Price", height: "500px"  %>

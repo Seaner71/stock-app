@@ -7,11 +7,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   post '/' => 'home#index'
 
-  resources :stocks do
-      member do
-        get "createDate", to: "stocks#createDate"
-      end
-    end
-
+  resources :stocks
+  post 'stocks/:id/', to: 'stocks#update'
 
 end

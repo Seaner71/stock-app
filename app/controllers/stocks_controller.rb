@@ -67,17 +67,6 @@ class StocksController < ApplicationController
     end
   end
 
-  def createDate
-    set_stock
-    @start_date = params['start']
-    @end_date = params['end']
-    @stock_history = StockQuote::Stock.history(@stock.ticker,   @start_date,  @end_date)
-    @stock_price_hash = {}
-    @stock_history[:history].each do |day|
-    @stock_price_hash[day[:date]] = day[:close]
-    end
-    render 'show'
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -87,7 +76,7 @@ class StocksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def stock_params
-      params.require(:stock).permit(:ticker, :user_id, :shares, :sname, :name)
+      params.require(:stock).permit(:ticker, :user_id, :shares, :sname, :name, :start_date, :end_date)
     end
     def correct_user
       @ticker = current_user.stocks.find_by(id: params[:id])
