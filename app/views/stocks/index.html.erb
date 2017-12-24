@@ -20,13 +20,13 @@
         <% @total_mv = 0 %>
         <% @stocks.each do |stock| %>
             <% @stock_quote = StockQuote::Stock.quote(stock.ticker) %>
-            <tr>
+          <tr>
               <td><%= link_to @stock_quote.name, stock %></td>
               <td><%= stock.ticker.upcase %></td>
               <td><%= stock.shares %></td>
               <td><%= stock.sname %></td>
               <td><%= @stock_quote.l %></td>
-                  <% @market_value = (stock.shares * @stock_quote.l.to_f)%>
+                  <% @market_value = (stock.shares * @stock_quote.l.gsub(/[^\d^\.]/, '').to_f)%>
               <td> <%= number_to_currency(@market_value) %></td>
                   <% @total_mv += @market_value %>
             </tr>
@@ -38,22 +38,20 @@
 <br>
 
 <%= link_to 'Add a Stock', new_stock_path, class: 'btn btn-default' %>
-<% color = [] %>
+<%# color = [] %>
 
-<% 6.times do %>
-  <% color.push('#' + "%06x" % (rand * 0xffffff)) %>
-<% end %>
+<%# 6.times do %>
+  <%# color.push('#' + "%06x" % (rand * 0xffffff)) %>
+<%# end %>
 
-<% color %>
+<%# color %>
 <div class="row">
     <div class="col-md-6">
-      <%= pie_chart @stocks.group(:name).sum(:shares), colors: color %>
+      <%= pie_chart @stocks.group(:name).sum(:shares) %>
     </div>
 
     <div class="col-md-6">
-      <%= pie_chart @stocks.group(:sname).sum(:shares), colors: color %>
+      <%= pie_chart @stocks.group(:sname).sum(:shares) %>
     </div>
 
   </div>
-
-    

@@ -12,8 +12,9 @@ class StocksController < ApplicationController
   # GET /stocks/1.json
   def show
     @stock = Stock.find_by_id(params[:id])
+    @stock_quote = StockQuote::Stock.quote(@stock.ticker)
+    @stock_history = StockQuote::Stock.history(@stock.ticker, start_date, end_date)
     # get_stock_history
-
   end
 
   # GET /stocks/new
@@ -34,7 +35,7 @@ class StocksController < ApplicationController
     @stock.name = StockQuote::Stock.quote(params['stock'][:ticker]).name
     respond_to do |format|
       if @stock.save
-        format.html { redirect_to @stock, notice: 'Stock was successfully created.' }
+        format.html { redirect_to stocks_path, notice: 'Stock was successfully created.' }
         format.json { render :show, status: :created, location: @stock }
       else
         format.html { render :new }
@@ -48,6 +49,7 @@ class StocksController < ApplicationController
   def update
     respond_to do |format|
       if @stock.update(stock_params)
+        # render 'new'
         format.html { redirect_to @stock, notice: 'Stock was successfully updated.' }
         format.json { render :show, status: :ok, location: @stock }
       else
@@ -82,11 +84,11 @@ class StocksController < ApplicationController
       @ticker = current_user.stocks.find_by(id: params[:id])
       redirect_to stocks_path, notice: "Not authorized to edit this stock" if @ticker.nil?
     end
-    # def get_stock_history
-    #  @stock_history = StockQuote::Stock.history(@stock.ticker, "07/15/2016", Time.now.strftime("%d/%m/%Y"))
-    #     @stock_price_hash = {}
-    #     @stock_history[:history].each do |day|
-    #       @stock_price_hash[day[:date]] = day[:close]
-    #     end
-    # end
+    def get_stock_history(ticker, start_date, end_date)
+     @stock_history = StockQuote::Stock.history(ticker, start_date, end_date)
+        @stock_price_hash = {}
+        @stock_history[:history].each do |day|
+          @stock_price_hash[day[:date]] = day[:close]
+        end
+    end
 end

@@ -8,20 +8,76 @@
 
 <br>
 <% if @stock %>
-  <%= @stock.name %> <br>
-  <%= @stock.symbol %> <br>
-  <%= @stock.op %> <br>
-  <%= @stock.eps %> <br>
-  <%= @stock.exchange %> <br>
-  <%= @stock.beta %> <br>
-  <%= @stock.sname %> <br>
-  <%= @stock.l.to_f %>
-  <% @stock.management.each do |m| %>
-      <%= m['name'] %> | <%= m['title'] %>
+  <div class="row">
+    <div class="col-md-6">
+      <%= @stock.name %> <br>
+      <%= @stock.symbol %> <br>
+      <%= @stock.op %> <br>
+      <%= @stock.eps %> <br>
+      <%= @stock.exchange %> <br>
+      <%= @stock.beta %> <br>
+      <%= @stock.sname %> <br>
+      <%= @stock.l.to_f %>
+    </div>
+    <div class="col-md-6">
+      <% @stock.management.each do |m| %>
+        <%= m['name'] %> | <%= m['title'] %>
+        <br>
         <% end %>
-      <br>
-      <%= @stock.financials[0]['f_figures'].map {|x| x['recent_quarter'] }.map.with_index {|y,i| y if i == 2 || i == 3 || i ==4 }.compact %>
+    </div>
+    <div class="col-md-6">
+      <%= @stock.name %> <br>
+      <%= @stock.symbol %> <br>
+      <%= @stock.op %> <br>
+      <%= @stock.eps %> <br>
+      <%= @stock.exchange %> <br>
+      <%= @stock.beta %> <br>
+      <%= @stock.sname %> <br>
+      <%= @stock.l.to_f %>
+    </div>
+  </div>
 
+
+
+  <%# @stock.moreresources%>
+      <br>
+      <% x = @stock.financials[0]['f_figures'].map {|x| x['recent_quarter'] }.map.with_index {|y,i| y if i == 2 || i == 3 || i ==4 }.compact %>
+<%= @stock.exchange %>
+<br>
+<br>
+  <%= @stock.f_reuters_url %>
+<br>
+<%# @stock.f_recent_quarter_date %>
+<%# @stock.f_annlyal_date %>
+<%# @stock.f_ttm_date %>
+<%# @stock.financials %>
+<br>
+<%= @stock.pe %>
+<br>
+<%= @stock.vo %>
+<br>
+<%= @stock.iname %>
+<br>
+
+
+
+<%= @stock.mc %>
+
+<%= @stock.fwpe %>
+<%= @stock.beta %>
+<%= @stock.eps %>
+<%= @stock.dy %>
+<%= @stock.ldiv %>
+<%= @stock.shares %>
+<%= @stock.instown %>
+<%= @stock.eo %>
+<%= @stock.sid %>
+<%= @stock.iid %>
+<%= @stock.iname %>
+
+  <%# @stock.related %>
+<%# @stock.summary %>
+<%# @stock.events%>
 
 <% elsif @nothing %>
   <%= @nothing %>

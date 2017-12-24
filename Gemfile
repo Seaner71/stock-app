@@ -11,6 +11,7 @@ gem 'stock_quote', '~> 1.5', '>= 1.5.4'
 gem 'devise', '~> 4.3'
 gem "chartkick"
 gem 'pry'
+gem 'wdm'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.4'
